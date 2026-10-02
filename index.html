@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sirna Galmeessuu Barattootaa</title>
+    <style>
+        /* --- DIZAAYINII (CSS) --- */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        h2 { color: white; margin-bottom: 20px; text-align: center; }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #1e3c72;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #2a5298;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        button:hover { background-color: #1e3c72; }
+
+        /* --- GABATEE BARATTOOTAA (TABLE) --- */
+        .table-container {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 800px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #1e3c72;
+            color: white;
+        }
+
+        tr:hover { background-color: #f1f1f1; }
+
+        .no-data { text-align: center; color: gray; padding: 20px; }
+        
+        .stats {
+            background: #e7f1ff;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            color: #1e3c72;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>🎓 Sirna Galmeessuu Barattootaa</h2>
+
+    <!-- --- FOOMII GALMEESSUU (REGISTRATION FORM) --- -->
+    <div class="container">
+        <div class="form-group">
+            <label for="fullName">Maqaa Guutuu:</label>
+            <input type="text" id="fullName" placeholder="Fkn: Abdiisaa Gammachuu">
+        </div>
+        <div class="form-group">
+            <label for="studentId">Lakkoofsa Barataa (ID):</label>
+            <input type="text" id="studentId" placeholder="Fkn: UGR/1234/14">
+        </div>
+        <div class="form-group">
+            <label for="age">Umrii:</label>
+            <input type="number" id="age" placeholder="Fkn: 20">
+        </div>
+        <div class="form-group">
+            <label for="gender">Saala:</label>
+            <select id="gender">
+                <option value="">-- Filadhu --</option>
+                <option value="Dhiira">Dhiira (Male)</option>
+                <option value="Dubartii">Dubartii (Female)</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="course">Barnoota (Department/Course):</label>
+            <input type="text" id="course" placeholder="Fkn: Computer Science">
+        </div>
+        
+        <button onclick="registerStudent()">✅ Barataa Galmeessi</button>
+    </div>
+
+    <!-- --- GABATEE BARATTOOTAA AGARSISU (DISPLAY TABLE) --- -->
+    <div class="table-container">
+        <div class="stats" id="stats">Barattoota Galmaa'an: 0</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Lakk.</th>
+                    <th>Maqaa Guutuu</th>
+                    <th>ID</th>
+                    <th>Umrii</th>
+                    <th>Saala</th>
+                    <th>Barnoota</th>
+                    <th>Gochi (Action)</th>
+                </tr>
+            </thead>
+            <tbody id="studentTableBody">
+                <tr>
+                    <td colspan="7" class="no-data">Ammaaf barattoota hin galmoofne.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- --- LOJIKII SIRNICHA (JAVASCRIPT) --- -->
+    <script>
+        // Daataa barattootaa kuusuu (Array)
+        let students = [];
+
+        // Barataa haaraa galmeessuu
+        function registerStudent() {
+            // Odeeffannoo foomii irraa argachuu
+            let name = document.getElementById('fullName').value.trim();
+            let id = document.getElementById('studentId').value.trim();
+            let age = document.getElementById('age').value.trim();
+            let gender = document.getElementById('gender').value;
+            let course = document.getElementById('course').value.trim();
+
+            // Mirkaneessuu (Validation) - Bakki duwwaa hin ta'u
+            if (!name || !id || !age || !gender || !course) {
+                alert("Bakka hunda guutuu kee isaa mirkaneessi!");
+                return;
+            }
+
+            // Barataa haaraa daataa keessatti dabaluu
+            let newStudent = {
+                name: name,
+                id: id,
+                age: age,
+                gender: gender,
+                course: course
+            };
+            
+            students.push(newStudent);
+            
+            // Foomii qulqulleessuu (Clear form)
+            clearForm();
+            
+            // Gabatee haaromsuu
+            renderTable();
+            
+            alert(`Barataan "${name}" milkaa'inaan galmaa'eera!`);
+        }
+
+        // Gabatee (Table) haaromsuu
+        function renderTable() {
+            let tableBody = document.getElementById('studentTableBody');
+            let stats = document.getElementById('stats');
+            
+            // Lakk. barattootaa haaromsuu
+            stats.innerText = `Barattoota Galmaa'an: ${students.length}`;
+
+            // Yoo barattoota hin jirre
+            if (students.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="7" class="no-data">Ammaaf barattoota hin galmoofne.</td></tr>`;
+                return;
+            }
+
+            // Gabatee hunda haquun haaraa barreessuu
+            tableBody.innerHTML = "";
+            students.forEach((student, index) => {
+                let row = `<tr>
+                    <td>${index + 1}</td>
+                    <td>${student.name}</td>
+                    <td>${student.id}</td>
+                    <td>${student.age}</td>
+                    <td>${student.gender}</td>
+                    <td>${student.course}</td>
+                    <td><button onclick="deleteStudent(${index})" style="background:#dc3545; padding:5px 10px; font-size:14px; width:auto;">Haqi</button></td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        // Barataa tokko haquu (Delete)
+        function deleteStudent(index) {
+            if (confirm("Barataa kana haquu akka barbaadde mirkaneessi?")) {
+                students.splice(index, 1);
+                renderTable();
+            }
+        }
+
+        // Foomii qulqulleessuu
+        function clearForm() {
+            document.getElementById('fullName').value = "";
+            document.getElementById('studentId').value = "";
+            document.getElementById('age').value = "";
+            document.getElementById('gender').value = "";
+            document.getElementById('course').value = "";
+        }
+    </script>
+
+</body>
+</html>
